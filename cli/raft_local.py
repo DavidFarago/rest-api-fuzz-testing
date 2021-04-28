@@ -118,11 +118,11 @@ def process_job_events_sink(job_events_path):
             try:
                 j = json.load(status, object_hook=RaftJsonDict.raft_json_object_hook)
                 status.close()
-                os.remove(file_path) 
+                os.remove(file_path)
                 if j['EventType'] == 'BugFound':
-                    bugs.append(j) 
+                    bugs.append(j)
                 elif j['EventType'] == 'JobStatus':
-                    js = job_status.get(j['Message']['AgentName']) 
+                    js = job_status.get(j['Message']['AgentName'])
                     if js:
                         if parse_utc_time(j['Message']['UtcEventTime']) > parse_utc_time(js['Message']['UtcEventTime']):
                             job_status[j['Message']['AgentName']] = j
@@ -148,7 +148,7 @@ def trigger_webhook(url, data, metadata=None):
 
     response = requests.post(url, json=data)
     return response
-        
+
 
 class RaftLocalCLI():
     def __init__(self, work_directory):
@@ -182,7 +182,7 @@ class RaftLocalCLI():
         env += self.env_variable('RAFT_APP_INSIGHTS_KEY', '00000000-0000-0000-0000-000000000000')
         env += self.env_variable('RAFT_SITE_HASH', '0')
         env += self.env_variable('RAFT_SB_OUT_SAS', 'dummy_sas')
-        
+
         # If we are running in a github action (or some other unique environment)
         # we will set this value before running
         # to distinquish between the different environments.
@@ -574,7 +574,7 @@ def run(args):
 
     work_dir = os.path.join(script_dir, 'local')
     if local_action == 'init':
-        storage, secrets = init_local(work_dir)
+        storage, secrets, _ = init_local(work_dir)
         print(f'Created results storage folder: {storage}')
         print(f'Created secrets folder: {secrets}')
 
